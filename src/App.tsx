@@ -5,6 +5,7 @@ import { CallbackPage } from './pages/CallbackPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { OrderDetailPage } from './pages/OrderDetailPage';
+import { CuttingListPage } from './pages/CuttingListPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 const queryClient = new QueryClient({
@@ -43,6 +44,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrderDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/:id/cutting-list"
+            element={
+              <ProtectedRoute>
+                <CuttingListPage />
               </ProtectedRoute>
             }
           />

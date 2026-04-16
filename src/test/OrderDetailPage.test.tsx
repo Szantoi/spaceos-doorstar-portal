@@ -13,7 +13,13 @@ vi.mock('../hooks/useOrder', () => ({
 vi.mock('../api/ordersApi', () => ({
   ordersApi: {
     submit: vi.fn(),
+    calculate: vi.fn(),
   },
+  DOOR_TYPES: [
+    { id: 'dt-standard-90', label: 'Standard 90cm' },
+    { id: 'dt-standard-100', label: 'Standard 100cm' },
+    { id: 'dt-double-180', label: 'Dupla szárny 180cm' },
+  ],
 }));
 
 function renderWithProviders(orderId: string) {

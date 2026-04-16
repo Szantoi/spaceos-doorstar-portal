@@ -1,7 +1,8 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOrder } from '../hooks/useOrder';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
+import { AddItemForm } from '../components/AddItemForm';
 import { ordersApi } from '../api/ordersApi';
 
 export function OrderDetailPage() {
@@ -15,6 +16,14 @@ export function OrderDetailPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders', id] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
+    },
+  });
+
+  const calculateMutation = useMutation({
+    mutationFn: () => ordersApi.calculate(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders', id] });
+      queryClient.invalidateQueries({ queryKey: ['cutting-list', id] });
     },
   });
 
@@ -34,6 +43,9 @@ export function OrderDetailPage() {
     );
   }
 
+  const isDraft = order.status === 'Draft';
+  const hasItems = order.items.length > 0;
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-3xl mx-auto px-4 py-8">
@@ -45,6 +57,7 @@ export function OrderDetailPage() {
           ← Vissza a rendelésekhez
         </button>
 
+        {/* Header card */}
         <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
           <div className="flex items-start justify-between mb-4">
             <div>
@@ -58,8 +71,8 @@ export function OrderDetailPage() {
             <OrderStatusBadge status={order.status} />
           </div>
 
-          {order.status === 'Draft' && (
-            <div className="pt-4 border-t border-slate-100">
+          {isDraft && (
+            <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
               <button
                 onClick={() => submitMutation.mutate()}
                 disabled={submitMutation.isPending}
@@ -68,21 +81,33 @@ export function OrderDetailPage() {
               >
                 {submitMutation.isPending ? 'Beküldés...' : 'Beküldés'}
               </button>
+              <button
+                onClick={() => calculateMutation.mutate()}
+                disabled={calculateMutation.isPending || !hasItems}
+                className="px-4 py-2 bg-amber-500 text-white text-sm rounded-lg hover:bg-amber-600 disabled:opacity-50 transition-colors"
+                data-testid="calculate-button"
+              >
+                {calculateMutation.isPending ? 'Kalkulálás...' : 'Kalkulálás'}
+              </button>
               {submitMutation.isError && (
-                <p className="mt-2 text-sm text-red-600">Hiba a beküldésnél.</p>
+                <p className="w-full text-sm text-red-600">Hiba a beküldésnél.</p>
+              )}
+              {calculateMutation.isError && (
+                <p className="w-full text-sm text-red-600">Hiba a kalkulációnál.</p>
               )}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        {/* Items card */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">
             Tételek ({order.items.length})
           </h2>
           {order.items.length === 0 ? (
             <p className="text-slate-500 text-sm" data-testid="no-items">Nincs tétel.</p>
           ) : (
-            <ul className="divide-y divide-slate-100" data-testid="items-list">
+            <ul className="divide-y divide-slate-100 mb-4" data-testid="items-list">
               {order.items.map((item) => (
                 <li key={item.id} className="py-3 flex items-center justify-between text-sm">
                   <span className="text-slate-700 font-mono">{item.doorTypeId}</span>
@@ -91,6 +116,27 @@ export function OrderDetailPage() {
               ))}
             </ul>
           )}
+
+          {isDraft && <AddItemForm orderId={id!} />}
+        </div>
+
+        {/* Cutting list link */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-800">Cutting lista</h2>
+              <p className="text-sm text-slate-500 mt-1">
+                Kalkuláció után megtekinthető a részletes szabáslista.
+              </p>
+            </div>
+            <Link
+              to={`/orders/${id}/cutting-list`}
+              className="px-4 py-2 bg-slate-700 text-white text-sm rounded-lg hover:bg-slate-800 transition-colors whitespace-nowrap"
+              data-testid="cutting-list-link"
+            >
+              Cutting lista megtekintése →
+            </Link>
+          </div>
         </div>
       </div>
     </div>
