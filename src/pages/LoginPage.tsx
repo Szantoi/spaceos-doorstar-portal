@@ -1,0 +1,22 @@
+import { userManager } from '../auth/keycloak.config';
+
+export function LoginPage() {
+  const handleLogin = () => {
+    userManager.signinRedirect();
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Doorstar Portal</h1>
+        <button
+          onClick={handleLogin}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          data-testid="login-button"
+        >
+          Bejelentkezés
+        </button>
+      </div>
+    </div>
+  );
+}
