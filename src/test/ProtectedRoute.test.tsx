@@ -9,6 +9,10 @@ vi.mock('react-oidc-context', () => ({
   useAuth: () => mockUseAuth(),
 }));
 
+vi.mock('../components/AppHeader', () => ({
+  AppHeader: () => <nav data-testid="app-header-stub" />,
+}));
+
 describe('ProtectedRoute', () => {
   it('redirects unauthenticated user to /login', () => {
     mockUseAuth.mockReturnValue({ isAuthenticated: false, isLoading: false });

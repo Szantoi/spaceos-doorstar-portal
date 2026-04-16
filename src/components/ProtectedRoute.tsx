@@ -1,5 +1,6 @@
 import { useAuth } from 'react-oidc-context';
 import { Navigate } from 'react-router-dom';
+import { AppHeader } from './AppHeader';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,5 +17,10 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <AppHeader />
+      {children}
+    </>
+  );
 }
