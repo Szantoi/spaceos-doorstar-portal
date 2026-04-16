@@ -1,17 +1,7 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { userManager } from '../auth/keycloak.config';
-
+// AuthProvider (react-oidc-context) automatically processes the PKCE callback
+// when it detects ?code= in the URL and calls onSigninCallback to redirect.
+// This page is only shown briefly during that processing.
 export function CallbackPage() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    userManager
-      .signinRedirectCallback()
-      .then(() => navigate('/', { replace: true }))
-      .catch(() => navigate('/login', { replace: true }));
-  }, [navigate]);
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <p>Bejelentkezés folyamatban...</p>

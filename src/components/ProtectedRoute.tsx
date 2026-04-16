@@ -18,9 +18,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   return (
-    <>
+    <div data-testid="app-shell">
       <AppHeader />
       {children}
-    </>
+    </div>
   );
 }

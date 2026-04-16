@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 export function AppHeader() {
   return (
-    <header className="bg-white border-b border-slate-200 print:hidden">
+    <header className="bg-white border-b border-slate-200 print:hidden" data-testid="app-header">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link
           to="/orders"
