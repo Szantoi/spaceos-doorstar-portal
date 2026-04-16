@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -8,6 +8,15 @@ const mockUseOrders = vi.fn();
 
 vi.mock('../hooks/useOrders', () => ({
   useOrders: () => mockUseOrders(),
+}));
+
+// Stub CreateOrderModal to avoid hook/navigate complexity in page tests
+vi.mock('../components/CreateOrderModal', () => ({
+  CreateOrderModal: ({ onClose }: { onClose: () => void }) => (
+    <div data-testid="create-order-modal">
+      <button onClick={onClose} data-testid="modal-close">Bezár</button>
+    </div>
+  ),
 }));
 
 function renderWithProviders(ui: React.ReactElement) {
@@ -65,6 +74,23 @@ describe('OrdersPage', () => {
     mockUseOrders.mockReturnValue({ isLoading: false, isError: false, data: { items: [], totalCount: 0, page: 1, pageSize: 20 } });
     renderWithProviders(<OrdersPage />);
     expect(screen.getByTestId('new-order-btn')).toBeInTheDocument();
+  });
+
+  it('opens CreateOrderModal when new order button is clicked', () => {
+    mockUseOrders.mockReturnValue({ isLoading: false, isError: false, data: { items: [], totalCount: 0, page: 1, pageSize: 20 } });
+    renderWithProviders(<OrdersPage />);
+    expect(screen.queryByTestId('create-order-modal')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('new-order-btn'));
+    expect(screen.getByTestId('create-order-modal')).toBeInTheDocument();
+  });
+
+  it('closes modal when onClose is called', () => {
+    mockUseOrders.mockReturnValue({ isLoading: false, isError: false, data: { items: [], totalCount: 0, page: 1, pageSize: 20 } });
+    renderWithProviders(<OrdersPage />);
+    fireEvent.click(screen.getByTestId('new-order-btn'));
+    expect(screen.getByTestId('create-order-modal')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('modal-close'));
+    expect(screen.queryByTestId('create-order-modal')).not.toBeInTheDocument();
   });
 
   it('shows error message on fetch failure', () => {

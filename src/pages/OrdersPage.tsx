@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useOrders } from '../hooks/useOrders';
 import { OrdersTable } from '../components/OrdersTable';
-import { NewOrderModal } from '../components/NewOrderModal';
+import { CreateOrderModal } from '../components/CreateOrderModal';
 
 function OrdersLoadingSkeleton() {
   return (
@@ -44,7 +44,7 @@ export function OrdersPage() {
         )}
       </div>
 
-      {showModal && <NewOrderModal onClose={() => setShowModal(false)} />}
+      {showModal && <CreateOrderModal onClose={() => setShowModal(false)} />}
     </div>
   );
 }

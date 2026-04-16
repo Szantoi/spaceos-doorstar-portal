@@ -50,6 +50,11 @@ export interface OrderDetail extends DoorOrder {
   items: OrderItem[];
 }
 
+export interface CreateOrderInput {
+  reference?: string;
+  notes?: string;
+}
+
 export const ordersApi = {
   list: async (): Promise<OrdersResponse> => {
     const res = await apiClient.get<OrdersResponse>('/api/orders');
@@ -63,6 +68,11 @@ export const ordersApi = {
 
   create: async (customerId: string): Promise<DoorOrder> => {
     const res = await apiClient.post<DoorOrder>('/api/orders', { customerId });
+    return res.data;
+  },
+
+  createOrder: async (data: CreateOrderInput): Promise<DoorOrder> => {
+    const res = await apiClient.post<DoorOrder>('/api/orders', data);
     return res.data;
   },
 
