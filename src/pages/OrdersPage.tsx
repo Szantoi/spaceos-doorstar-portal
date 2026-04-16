@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useOrders } from '../hooks/useOrders';
 import { OrdersTable } from '../components/OrdersTable';
 import { CreateOrderModal } from '../components/CreateOrderModal';
+import { StatusFilter } from '../components/StatusFilter';
 
 function OrdersLoadingSkeleton() {
   return (
@@ -15,12 +17,14 @@ function OrdersLoadingSkeleton() {
 
 export function OrdersPage() {
   const [showModal, setShowModal] = useState(false);
-  const { data, isLoading, isError } = useOrders();
+  const [searchParams] = useSearchParams();
+  const activeStatus = searchParams.get('status') ?? undefined;
+  const { data, isLoading, isError } = useOrders(activeStatus);
 
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-slate-800">Rendelések</h1>
           <button
             onClick={() => setShowModal(true)}
@@ -29,6 +33,10 @@ export function OrdersPage() {
           >
             + Új rendelés
           </button>
+        </div>
+
+        <div className="mb-6">
+          <StatusFilter />
         </div>
 
         {isLoading && <OrdersLoadingSkeleton />}

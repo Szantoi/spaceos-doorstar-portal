@@ -55,9 +55,24 @@ export interface CreateOrderInput {
   notes?: string;
 }
 
+export interface OrderHistoryEvent {
+  id: string;
+  fromStatus: string | null;
+  toStatus: string;
+  occurredAt: string;
+  triggeredBy: string;
+  note?: string;
+}
+
+export interface OrderHistory {
+  orderId: string;
+  events: OrderHistoryEvent[];
+}
+
 export const ordersApi = {
-  list: async (): Promise<OrdersResponse> => {
-    const res = await apiClient.get<OrdersResponse>('/api/orders');
+  list: async (status?: string): Promise<OrdersResponse> => {
+    const params = status ? { status } : {};
+    const res = await apiClient.get<OrdersResponse>('/api/orders', { params });
     return res.data;
   },
 
@@ -96,6 +111,11 @@ export const ordersApi = {
     const res = await apiClient.get<CuttingList>(`/api/orders/${orderId}/cutting-list`, {
       headers: { 'Cache-Control': 'no-store' },
     });
+    return res.data;
+  },
+
+  getOrderHistory: async (orderId: string): Promise<OrderHistory> => {
+    const res = await apiClient.get<OrderHistory>(`/api/orders/${orderId}/history`);
     return res.data;
   },
 };

@@ -10,6 +10,11 @@ vi.mock('../hooks/useOrder', () => ({
   useOrder: () => mockUseOrder(),
 }));
 
+// Stub OrderHistoryPanel to isolate OrderDetailPage tests
+vi.mock('../components/OrderHistoryPanel', () => ({
+  OrderHistoryPanel: () => <div data-testid="history-panel-stub" />,
+}));
+
 vi.mock('../api/ordersApi', () => ({
   ordersApi: {
     submit: vi.fn(),

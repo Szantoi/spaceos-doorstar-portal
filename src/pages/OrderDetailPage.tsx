@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOrder } from '../hooks/useOrder';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
 import { AddItemForm } from '../components/AddItemForm';
+import { OrderHistoryPanel } from '../components/OrderHistoryPanel';
 import { ordersApi } from '../api/ordersApi';
 
 export function OrderDetailPage() {
@@ -118,6 +119,11 @@ export function OrderDetailPage() {
           )}
 
           {isDraft && <AddItemForm orderId={id!} />}
+        </div>
+
+        {/* Status history */}
+        <div className="mb-6">
+          <OrderHistoryPanel orderId={id!} />
         </div>
 
         {/* Cutting list link */}
