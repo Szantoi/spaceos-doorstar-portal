@@ -10,7 +10,7 @@ export async function resetTenant(seedProfile: SeedProfile | string): Promise<vo
   const url = `${apiBase}/bff/test/tenants/${tenantId}/reset?confirm=true`;
 
   const res = await fetch(url, {
-    method: 'DELETE',
+    method: 'POST',
     headers: {
       'X-SpaceOS-Internal': 'true',
       'X-SpaceOS-Brand': 'joinerytech',
