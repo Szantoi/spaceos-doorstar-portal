@@ -10,7 +10,7 @@ export function AppHeader() {
         >
           Doorstar Portal
         </Link>
-        <nav className="flex items-center gap-4" aria-label="Fő navigáció">
+        <nav className="flex items-center gap-4" aria-label="Fő navigáció" data-testid="nav-sidebar">
           <NavLink
             to="/orders"
             className={({ isActive }) =>
@@ -28,7 +28,7 @@ export function AppHeader() {
                 isActive ? 'text-blue-600' : 'text-slate-600 hover:text-slate-800'
               }`
             }
-            data-testid="profile-nav-link"
+            data-testid="user-menu"
           >
             Profil
           </NavLink>

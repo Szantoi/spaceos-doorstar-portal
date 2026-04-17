@@ -6,7 +6,8 @@ export default defineConfig({
   retries: 1,
   workers: 1,
   use: {
-    baseURL: process.env.VITE_API_BASE_URL || 'https://portal.joinerytech.hu',
+    // Portal UI URL — distinct from VITE_API_BASE_URL (BFF base: joinerytech.hu)
+    baseURL: process.env.TEST_PORTAL_URL || 'https://portal.joinerytech.hu',
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
