@@ -5,6 +5,36 @@
 
 ---
 
+## JELENLEGI ÁLLAPOT (2026-04-17)
+
+| | |
+|---|---|
+| **Terminál** | fe · Mailbox: `/opt/spaceos/docs/mailbox/fe/` |
+| **Repo** | `/opt/spaceos/spaceos-doorstar-portal` |
+| **Aktuális commit** | `fff1f65` (FE-010: Flow 02–06 E2E spec fájlok) |
+| **Tesztek** | **90/90 pass** (87 unit + 3 contract) |
+| **VPS** | https://portal.joinerytech.hu LIVE ✅ |
+
+### ⚠️ Ismert bug — resetTenant.ts HTTP metódus
+`tests/e2e/helpers/resetTenant.ts` jelenleg `DELETE` metódust használ.
+A BFF reset endpoint valójában **`POST`** — javítani kell FE-011-ben:
+```typescript
+// ROSSZ: method: 'DELETE'
+// HELYES: method: 'POST'
+```
+
+### E2E-L2 Playwright állapot
+- `tests/e2e/` infrastruktúra kész (FE-009): `playwright.config.ts`, `global-setup.ts`, fixtures, testIds
+- Flow 01 (login, 6 teszt) + Flow 08 (auth edge, 5 teszt): implementálva
+- Flow 02 + 06: részleges (valódi tesztek)
+- Flow 03, 04, 05: `test.skip` — UI route-ok (`/cutting/plans`, `/inventory`, nesting) nem léteznek még
+- Flow 07 (Supplier): FE-011-re halasztva
+
+### CSP (nginx)
+`connect-src 'self' https://joinerytech.hu https://auth.joinerytech.hu https://api.anthropic.com` ✅ LIVE
+
+---
+
 ## Working Directory Constraint
 
 Your working directory is `/opt/spaceos/spaceos-doorstar-portal/`. You MUST NOT:
