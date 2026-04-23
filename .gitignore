@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Mailbox — dispatcher managed, not part of repo
+mailbox/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
