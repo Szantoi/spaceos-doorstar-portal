@@ -4,6 +4,8 @@ import { useOrder } from '../hooks/useOrder';
 import { OrderStatusBadge } from '../components/OrderStatusBadge';
 import { AddItemForm } from '../components/AddItemForm';
 import { OrderHistoryPanel } from '../components/OrderHistoryPanel';
+import { BatchPdfButton } from '../components/BatchPdfButton';
+import { AnyaglistaButton } from '../components/AnyaglistaButton';
 import { ordersApi } from '../api/ordersApi';
 
 export function OrderDetailPage() {
@@ -119,6 +121,15 @@ export function OrderDetailPage() {
           )}
 
           {isDraft && <AddItemForm orderId={id!} />}
+        </div>
+
+        {/* Dokumentumok */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6" data-testid="documents-section">
+          <h2 className="text-lg font-semibold text-slate-800 mb-4">Dokumentumok</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <BatchPdfButton orderId={id!} />
+            <AnyaglistaButton orderId={id!} />
+          </div>
         </div>
 
         {/* Status history */}

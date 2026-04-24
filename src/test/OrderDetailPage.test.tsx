@@ -10,9 +10,21 @@ vi.mock('../hooks/useOrder', () => ({
   useOrder: () => mockUseOrder(),
 }));
 
-// Stub OrderHistoryPanel to isolate OrderDetailPage tests
+// Stub child components to isolate OrderDetailPage tests
 vi.mock('../components/OrderHistoryPanel', () => ({
   OrderHistoryPanel: () => <div data-testid="history-panel-stub" />,
+}));
+
+vi.mock('../components/BatchPdfButton', () => ({
+  BatchPdfButton: ({ orderId }: { orderId: string }) => (
+    <div data-testid="batch-pdf-section">BatchPdf-{orderId.slice(0, 8)}</div>
+  ),
+}));
+
+vi.mock('../components/AnyaglistaButton', () => ({
+  AnyaglistaButton: ({ orderId }: { orderId: string }) => (
+    <div data-testid="anyaglista-section">Anyaglista-{orderId.slice(0, 8)}</div>
+  ),
 }));
 
 vi.mock('../api/ordersApi', () => ({
@@ -101,5 +113,13 @@ describe('OrderDetailPage', () => {
     mockUseOrder.mockReturnValue({ isLoading: false, isError: false, data: mockDraftOrder });
     renderWithProviders('draft-order-uuid-0000-0000-000000000000');
     expect(screen.getByTestId('back-button')).toBeInTheDocument();
+  });
+
+  it('shows Dokumentumok section with BatchPdf and Anyaglista buttons', () => {
+    mockUseOrder.mockReturnValue({ isLoading: false, isError: false, data: mockDraftOrder });
+    renderWithProviders('draft-order-uuid-0000-0000-000000000000');
+    expect(screen.getByTestId('documents-section')).toBeInTheDocument();
+    expect(screen.getByTestId('batch-pdf-section')).toBeInTheDocument();
+    expect(screen.getByTestId('anyaglista-section')).toBeInTheDocument();
   });
 });
