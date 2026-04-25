@@ -47,7 +47,8 @@ export function OrderDetailPage() {
   }
 
   const isDraft = order.status === 'Draft';
-  const hasItems = order.items.length > 0;
+  const items = order.items ?? [];
+  const hasItems = items.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -105,13 +106,13 @@ export function OrderDetailPage() {
         {/* Items card */}
         <div className="bg-white rounded-xl border border-slate-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-slate-800 mb-4">
-            Tételek ({order.items.length})
+            Tételek ({items.length})
           </h2>
-          {order.items.length === 0 ? (
+          {items.length === 0 ? (
             <p className="text-slate-500 text-sm" data-testid="no-items">Nincs tétel.</p>
           ) : (
             <ul className="divide-y divide-slate-100 mb-4" data-testid="items-list">
-              {order.items.map((item) => (
+              {items.map((item) => (
                 <li key={item.id} className="py-3 flex items-center justify-between text-sm">
                   <span className="text-slate-700 font-mono">{item.doorTypeId}</span>
                   <span className="text-slate-500">× {item.quantity} db</span>
