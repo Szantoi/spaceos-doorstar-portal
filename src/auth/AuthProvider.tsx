@@ -10,8 +10,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     <OidcAuthProvider
       userManager={userManager}
       onSigninCallback={() => {
-        // Remove OIDC query params from URL and redirect to orders after PKCE callback
-        window.history.replaceState({}, document.title, '/orders');
+        // Full navigation to /orders after PKCE callback — replaceState alone
+        // doesn't notify React Router, leaving the page stuck on CallbackPage
+        window.location.replace('/orders');
       }}
     >
       {children}
