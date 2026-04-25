@@ -1,8 +1,9 @@
-import { UserManager, WebStorageStateStore, InMemoryWebStorage } from 'oidc-client-ts';
+import { UserManager, WebStorageStateStore } from 'oidc-client-ts';
 
-// SEC-UI-02: userStore marad InMemoryWebStorage (token nem kerül sessionStorage-ba)
-// stateStore: sessionStorage szükséges — PKCE state/code_verifier túl kell élje a full-page redirectet
-const inMemoryStorage = new InMemoryWebStorage();
+// SEC-UI-02 update: sessionStorage for both stores.
+// sessionStorage survives F5 reload but clears on tab close — acceptable compromise.
+// stateStore: PKCE state/code_verifier must survive the full-page redirect.
+// userStore: token must survive F5 reload.
 
 export const userManager = new UserManager({
   authority:
@@ -16,6 +17,6 @@ export const userManager = new UserManager({
   scope: 'openid profile spaceos-tenant-scope',
   automaticSilentRenew: true,
   silentRequestTimeoutInSeconds: 10,
-  userStore: new WebStorageStateStore({ store: inMemoryStorage }),
+  userStore: new WebStorageStateStore({ store: sessionStorage }),
   stateStore: new WebStorageStateStore({ store: sessionStorage }),
 });

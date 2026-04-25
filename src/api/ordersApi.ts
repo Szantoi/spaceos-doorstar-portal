@@ -72,22 +72,22 @@ export interface OrderHistory {
 export const ordersApi = {
   list: async (status?: string): Promise<OrdersResponse> => {
     const params = status ? { status } : {};
-    const res = await apiClient.get<OrdersResponse>('/api/orders', { params });
+    const res = await apiClient.get<OrdersResponse>('/joinery/orders', { params });
     return res.data;
   },
 
   get: async (id: string): Promise<OrderDetail> => {
-    const res = await apiClient.get<OrderDetail>(`/api/orders/${id}`);
+    const res = await apiClient.get<OrderDetail>(`/joinery/orders/${id}`);
     return res.data;
   },
 
   create: async (customerId: string): Promise<DoorOrder> => {
-    const res = await apiClient.post<DoorOrder>('/api/orders', { customerId });
+    const res = await apiClient.post<DoorOrder>('/joinery/orders', { customerId });
     return res.data;
   },
 
   createOrder: async (data: CreateOrderInput): Promise<DoorOrder> => {
-    const res = await apiClient.post<DoorOrder>('/api/orders', data);
+    const res = await apiClient.post<DoorOrder>('/joinery/orders', data);
     return res.data;
   },
 
@@ -95,27 +95,27 @@ export const ordersApi = {
     orderId: string,
     item: { doorTypeId: string; quantity: number; customOptions?: Record<string, unknown> },
   ): Promise<void> => {
-    await apiClient.post(`/api/orders/${orderId}/items`, item);
+    await apiClient.post(`/joinery/orders/${orderId}/items`, item);
   },
 
   submit: async (orderId: string): Promise<void> => {
-    await apiClient.post(`/api/orders/${orderId}/submit`);
+    await apiClient.post(`/joinery/orders/${orderId}/submit`);
   },
 
   calculate: async (orderId: string): Promise<void> => {
-    await apiClient.post(`/api/orders/${orderId}/calculate`);
+    await apiClient.post(`/joinery/orders/${orderId}/calculate`);
   },
 
   getCuttingList: async (orderId: string): Promise<CuttingList> => {
     // Cache-Control: no-store — always fresh data
-    const res = await apiClient.get<CuttingList>(`/api/orders/${orderId}/cutting-list`, {
+    const res = await apiClient.get<CuttingList>(`/joinery/orders/${orderId}/cutting-list`, {
       headers: { 'Cache-Control': 'no-store' },
     });
     return res.data;
   },
 
   getOrderHistory: async (orderId: string): Promise<OrderHistory> => {
-    const res = await apiClient.get<OrderHistory>(`/api/orders/${orderId}/history`);
+    const res = await apiClient.get<OrderHistory>(`/joinery/orders/${orderId}/history`);
     return res.data;
   },
 };
