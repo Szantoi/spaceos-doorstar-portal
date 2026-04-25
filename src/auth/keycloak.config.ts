@@ -1,6 +1,7 @@
 import { UserManager, WebStorageStateStore, InMemoryWebStorage } from 'oidc-client-ts';
 
-// SEC-UI-02: InMemoryWebStorage kötelező — sessionStorage/localStorage TILOS
+// SEC-UI-02: userStore marad InMemoryWebStorage (token nem kerül sessionStorage-ba)
+// stateStore: sessionStorage szükséges — PKCE state/code_verifier túl kell élje a full-page redirectet
 const inMemoryStorage = new InMemoryWebStorage();
 
 export const userManager = new UserManager({
@@ -16,5 +17,5 @@ export const userManager = new UserManager({
   automaticSilentRenew: true,
   silentRequestTimeoutInSeconds: 10,
   userStore: new WebStorageStateStore({ store: inMemoryStorage }),
-  stateStore: new WebStorageStateStore({ store: inMemoryStorage }),
+  stateStore: new WebStorageStateStore({ store: sessionStorage }),
 });
